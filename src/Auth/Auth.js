@@ -5,6 +5,7 @@ import { LOCAL_STORAGE_KEYS, ROUTES } from '../config';
 export default class Auth {
     constructor(history) {
         this.history = history;
+        this.userProfile = null;
         this.auth0 = new auth0.WebAuth({
             domain: process.env.REACT_APP_AUTH0_DOMAIN,
             clientID: process.env.REACT_APP_AUTH0_CLIENTID,
@@ -16,6 +17,17 @@ export default class Auth {
 
     login = () => {
         this.auth0.authorize();
+    };
+
+    logout = () => {
+        localStorage.removeItem(LOCAL_STORAGE_KEYS.ACCESS_TOKEN);
+        localStorage.removeItem(LOCAL_STORAGE_KEYS.ID_TOKEN);
+        localStorage.removeItem(LOCAL_STORAGE_KEYS.EXPIRES_AT);
+        this.userProfile = null;
+        this.auth0.logout({
+            clientID: process.env.REACT_APP_AUTH0_CLIENTID,
+            returnTo: 'http://localhost:3000'
+        });
     };
 
     setSession = authResponse => {
@@ -43,4 +55,18 @@ export default class Auth {
         const expiresAt = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.EXPIRES_AT));
         return new Date().getTime() < expiresAt;
     }
+
+    getAccessToken = () => {
+        const accessToken = localStorage.getItem(LOCAL_STORAGE_KEYS.ACCESS_TOKEN);
+        if (!accessToken) throw new Error('No access token found.');
+        return accessToken;
+    };
+
+    getProfile = callback => {
+        if (this.userProfile) return callback(this.userProfile);
+        this.auth0.client.userInfo(this.getAccessToken(), (err, profile) => {
+            if (profile) this.userProfile = profile;
+            callback(profile, err);
+        });
+    };
 }

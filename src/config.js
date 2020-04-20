@@ -1,7 +1,7 @@
 export const ROUTES = {
-    HOME: 'home',
-    PROFILE: 'profile',
-    CALLBACK: 'callback'
+    HOME: '/',
+    PROFILE: '/profile',
+    CALLBACK: '/callback'
 };
 
 export const LOCAL_STORAGE_KEYS = {
