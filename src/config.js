@@ -1,6 +1,8 @@
 export const ROUTES = {
     HOME: '/',
     PROFILE: '/profile',
+    PUBLIC: '/public',
+    PRIVATE: '/private',
     CALLBACK: '/callback'
 };
 

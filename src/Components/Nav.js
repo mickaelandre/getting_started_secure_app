@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { ROUTES } from './config';
+import { ROUTES } from '../config';
 
 class Nav extends Component {
     render() {
@@ -15,6 +15,14 @@ class Nav extends Component {
                     <li>
                         <Link to={ROUTES.PROFILE}> Profile </Link>
                     </li>
+                    <li>
+                        <Link to={ROUTES.PUBLIC}> Public </Link>
+                    </li>
+                    {isAuthenticated() && (
+                        <li>
+                            <Link to={ROUTES.PRIVATE}> Private </Link>
+                        </li>
+                    )}
                     <li style={styles.login}>
                         <button onClick={isAuthenticated() ? logout : login}>
                             {isAuthenticated() ? 'Log Out' : 'Log In'}

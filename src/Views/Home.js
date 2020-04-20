@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { ROUTES } from './config';
+import { ROUTES } from '../config';
 
 class Home extends Component {
     render() {
