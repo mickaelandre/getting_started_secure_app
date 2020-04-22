@@ -12,32 +12,31 @@ import Private from './Views/Private';
 import Courses from './Views/Courses';
 import Admin from './Views/Admin';
 import SecureRoute from './SecureRoute';
+import AuthContext from './Auth/AuthContext';
+import PublicRoute from './PublicRoute';
 
 class App extends Component {
     constructor(props) {
         super(props);
-        this.auth = new Auth(this.props.history);
+        this.state = {
+            auth: new Auth(this.props.history)
+        };
     }
     render() {
+        const { auth } = this.state;
         return (
-            <>
-                <Nav auth={this.auth} />
+            <AuthContext.Provider value={auth}>
+                <Nav auth={auth} />
                 <div className="body">
-                    <Route path={ROUTES.HOME} exact render={props => <Home auth={this.auth} {...props} />} />
-                    <Route path={ROUTES.CALLBACK} render={props => <Callback auth={this.auth} {...props} />} />
                     <Route path={ROUTES.PUBLIC} component={Public} />
-                    <SecureRoute path={ROUTES.PRIVATE} component={Private} auth={this.auth} rest={this.props} />
-                    <SecureRoute path={ROUTES.PROFILE} component={Profile} auth={this.auth} rest={this.props} />
-                    <SecureRoute
-                        path={ROUTES.COURSE}
-                        component={Courses}
-                        auth={this.auth}
-                        rest={this.props}
-                        scopes={['read:courses']}
-                    />
-                    <SecureRoute path={ROUTES.ADMIN} component={Admin} auth={this.auth} rest={this.props} />
+                    <PublicRoute exact path={ROUTES.HOME} component={Home} />
+                    <PublicRoute path={ROUTES.CALLBACK} component={Callback} />
+                    <SecureRoute path={ROUTES.PRIVATE} component={Private} rest={this.props} />
+                    <SecureRoute path={ROUTES.PROFILE} component={Profile} rest={this.props} />
+                    <SecureRoute path={ROUTES.COURSE} component={Courses} rest={this.props} scopes={['read:courses']} />
+                    <SecureRoute path={ROUTES.ADMIN} component={Admin} rest={this.props} />
                 </div>
-            </>
+            </AuthContext.Provider>
         );
     }
 }
