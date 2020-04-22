@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ROUTES } from '../config';
 
 class Public extends Component {
     state = {
@@ -7,7 +8,7 @@ class Public extends Component {
 
     async componentDidMount() {
         try {
-            const response = await fetch('/public');
+            const response = await fetch(ROUTES.PUBLIC);
             const json = await response.json();
             this.setState({ message: json.message });
         } catch (e) {

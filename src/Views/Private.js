@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ROUTES } from '../config';
 
 class Private extends Component {
     state = {
@@ -8,7 +9,7 @@ class Private extends Component {
     async componentDidMount() {
         try {
             const { getAccessToken } = this.props.auth;
-            const response = await fetch('/private', { headers: { Authorization: `Bearer ${getAccessToken()}` } });
+            const response = await fetch(ROUTES.PRIVATE, { headers: { Authorization: `Bearer ${getAccessToken()}` } });
             const json = await response.json();
             this.setState({ message: json.message });
         } catch (e) {
